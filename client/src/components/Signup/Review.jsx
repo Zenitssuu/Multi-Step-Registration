@@ -7,32 +7,29 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { clearDetails } from "../../store/FormSlice.js";
+import { toast } from "sonner";
 
 function Review() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const [profileImage, setProfileImage] = useState();
   const { handleSubmit, register } = useForm();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const userData = useSelector((state) => state.formReducer);
-  // console.log(userData);
-
-  // console.log(userData);
-
-  // const handleSubmit = async () => {
-  //   // console.log("here");
-  //   console.log(userData);
-  //   console.log(profileImage);
-
-  
-  // };
 
   const submit = async (data) => {
-    // console.log(userData);
-    // console.log(data);  
-
-    if(!userData.name || !userData.email || !userData.password || !userData.address || !userData.phoneNumber){
-      navigate('/signup/credentials');
+    setIsSubmitting(true);
+    if (
+      !userData.name ||
+      !userData.email ||
+      !userData.password ||
+      !userData.address ||
+      !userData.phoneNumber
+    ) {
+      toast.error("all feilds are required!!");
+      setTimeout(() => {
+        navigate("/signup/credentials");
+      }, 1000);
     }
 
     const formData = new FormData();
@@ -41,14 +38,22 @@ function Review() {
     formData.append("password", userData.password);
     formData.append("address", userData.address);
     formData.append("phoneNumber", userData.phoneNumber);
-    formData.append("profileImage",data.image[0]);
+    formData.append("profileImage", data.image[0]);
 
-    const resp = await axios.post('/user/signup',formData);
-    // console.log(resp);   
-    dispatch(clearDetails())
+    const resp = await axios.post("/user/signup", formData);
+    // console.log(resp);
 
-    navigate('/login')
-        
+    if (resp.status === 200 || resp.status === 201) {
+      dispatch(clearDetails());
+      toast.success("signup sucessfully!! Redirecting to login page");
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
+      setIsSubmitting(false);
+    }
+    else{
+      toast.error("something went wrong!! try again");
+    }
   };
 
   return (
@@ -120,7 +125,7 @@ function Review() {
         </div>
         <div className="w-[500px] flex justify-center mt-4">
           <Button type="submit" className="px-7">
-            Submit
+            {isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         </div>
       </form>

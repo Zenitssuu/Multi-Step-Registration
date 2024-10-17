@@ -17,8 +17,8 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path:"",
-        element:<Home />
+        path: "",
+        element: <Home />,
       },
       {
         path: "signup",
@@ -26,7 +26,11 @@ const router = createBrowserRouter([
         children: [
           {
             path: "credentials",
-            element: <Credentials />,
+            element: (
+              <AuthLayout>
+                <Credentials />
+              </AuthLayout>
+            ),
           },
           {
             path: "address",
@@ -39,30 +43,30 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path:"login",
-        element:<Login />
+        path: "login",
+        element: <Login />,
       },
       {
-        path:"dashboard",
-        element:(
-          <AuthLayout>
-            <Dashboard/>
+        path: "dashboard",
+        element: (
+          <AuthLayout Authorization={true}>
+            <Dashboard />
           </AuthLayout>
-        )
+        ),
       },
-      
+
       {
-        path:"update",
-        element:(
-          <AuthLayout>
-            <UpdatePage/>
+        path: "update",
+        element: (
+          <AuthLayout Authorization={true}>
+            <UpdatePage />
           </AuthLayout>
-        )
+        ),
       },
       {
-        path:"*",
-        element:<Navigate to="/"/>
-      }
+        path: "*",
+        element: <Navigate to="/" />,
+      },
     ],
   },
 ]);

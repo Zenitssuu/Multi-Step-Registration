@@ -13,6 +13,7 @@ function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleLogout = () => {
+    setIsAuthorized(false);
     dispatch(clearDetails());
     dispatch(authLogout());
     navigate("/");
@@ -21,14 +22,14 @@ function Header() {
     if (user?.token === token) {
       setIsAuthorized(true);
     }
-  },);
+  });
 
   return (
     <header className="flex items-center justify-between px-6 py-4 border-b shadow-lg bg-[#f3e0cf]">
       <div className="w-full px-4">
         <nav className="flex items-center justify-between w-full">
           <div className="w-1/12 font-bold text-xl">
-            <Link to="/">
+            <Link to={isAuthorized ? "/dashboard" : "/"}>
               <FaHome />
             </Link>
           </div>

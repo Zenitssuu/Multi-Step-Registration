@@ -2,7 +2,7 @@ import React, { useState,useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-function AuthLayout({ children }) {
+function AuthLayout({ children, Authorization = false }) {
   //fetching the user from redux and token from localstorage,
   //if both are same then user is authorized
   // else unuthorized
@@ -16,7 +16,7 @@ function AuthLayout({ children }) {
   // console.log(user);
   
   useEffect(() => {
-    if (user?.token === token) {
+    if (Authorization && user?.token === token) {
       setIsAuthorized(true);
     } else {
       navigate("signup/credentials");

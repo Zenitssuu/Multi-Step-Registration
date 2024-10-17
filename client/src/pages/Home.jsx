@@ -23,11 +23,7 @@ function Home() {
 
   if(!isAuthorized){
     return <UnAuthorizedPage /> 
-  }
-
-  
-
-  
+  } 
 }
 
 export default Home;

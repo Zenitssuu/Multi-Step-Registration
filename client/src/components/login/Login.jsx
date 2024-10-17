@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import { useForm } from "react-hook-form";
 import Input from "../Input.jsx";
 import Button from "../Button.jsx";
@@ -6,14 +6,16 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import {login as authLogin} from "../../store/UserSlice.js"
 import { useNavigate } from "react-router-dom";
-
+import {toast} from "sonner"
 
 function Login() {
     const {handleSubmit,register} = useForm();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const submit = async (data)=>{
+      setIsSubmitting(true)
         const formData = new FormData();
         formData.append('email',data.email);
         formData.append('password',data.password);
@@ -28,7 +30,14 @@ function Login() {
         if(resp.status === 200){
           const token = resp.data.token
           dispatch(authLogin(token));
-          navigate('/dashboard');            
+          toast.success("login successful!! directing to dashboard in 1s");
+          setTimeout(() => {
+            navigate('/dashboard');  
+          }, 1500);
+          setIsSubmitting(false)          
+        }
+        else{
+          toast.error(resp.data.message);
         }
     }
 
@@ -61,8 +70,10 @@ function Login() {
         </div>
 
         <div className="lg:w-full flex px-5 justify-center mt-3 gap-x-[4rem] mb-4">
-          <Button type="submit" className=" bg-blue-500 px-[4rem]">
-            Next
+          <Button
+          // onClick = {e => setIsSubmitting(prev => !prev)}
+          type="submit" className=" bg-blue-500 px-[4rem]">
+            {isSubmitting ? "Submitting..." : "Login"}
           </Button>
         </div>
       </form>
