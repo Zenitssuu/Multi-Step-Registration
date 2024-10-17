@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import Button from "../Button.jsx";
@@ -6,11 +6,13 @@ import Input from "../Input.jsx";
 import axios from "axios";
 import { setData as setUserData } from "../../store/UserSlice.js";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 function UpdateForm() {
   const user = useSelector((state) => state.userReducer.user);
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const { handleSubmit, register } = useForm({
     defaultValues: {
@@ -39,20 +41,24 @@ function UpdateForm() {
         Authorization: `Bearer ${user?.token}`,
       },
     });
-    console.log(resp);
+    // console.log(resp);
 
-    if (resp.status === 201) {
+    if (resp.status === 201 || resp.status === 200) {
+      toast.success("updated sucessfully!!");
       const userData = resp.data.user;
       const newDataObj = {};
       for (let key in userData) {
         if (typeof data[key] === "string") newDataObj[key] = data[key];
       }
       dispatch(setUserData(newDataObj));
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 100);
     }
 
-    setTimeout(() => {
-        navigate('/dashboard');
-    }, 500);
+    else{
+      toast.error("something went wrong!! Try again")
+    }
   };
 
   return (
@@ -116,7 +122,7 @@ function UpdateForm() {
 
         <div className="lg:w-full flex px-5 justify-center mt-3 gap-x-[4rem] mb-4">
           <Button type="submit" className=" bg-green-500 px-[4rem]">
-            Update
+            {isUpdating ? "Updating..." : "Update"}
           </Button>
         </div>
       </form>
