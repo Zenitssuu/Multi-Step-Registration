@@ -15,16 +15,17 @@ function Home() {
   // console.log(user.token);
 
   useEffect(() => {
-    if(token && user?.token && token!==user?.token){
-      setIsAuthorized(true)
+    if(token && user?.token && token===user?.token){
+      navigate('/dashboard')
     }
-  })
+
+  },[navigate,setIsAuthorized])
 
   if(!isAuthorized){
     return <UnAuthorizedPage /> 
   }
 
-  return <Dashboard />
+  
 
   
 }
