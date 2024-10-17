@@ -34,11 +34,12 @@ function Login() {
           setTimeout(() => {
             navigate('/dashboard');  
           }, 1500);
-          setIsSubmitting(false)          
         }
         else{
           toast.error(resp.data.message);
         }
+        setIsSubmitting(false)          
+
     }
 
   return (

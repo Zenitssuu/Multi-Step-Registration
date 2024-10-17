@@ -25,8 +25,8 @@ function UpdateForm() {
   //   console.log(user);
 
   const submit = async (data) => {
-    console.log(data);
-
+    // console.log(data);
+    setIsUpdating(true);
     const formData = new FormData();
 
     if (data.name) formData.append("name", data.name);
@@ -59,6 +59,7 @@ function UpdateForm() {
     else{
       toast.error("something went wrong!! Try again")
     }
+    setIsUpdating(false);
   };
 
   return (

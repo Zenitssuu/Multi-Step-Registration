@@ -49,11 +49,12 @@ function Review() {
       setTimeout(() => {
         navigate("/login");
       }, 1500);
-      setIsSubmitting(false);
     }
     else{
       toast.error("something went wrong!! try again");
     }
+    setIsSubmitting(false);
+
   };
 
   return (
